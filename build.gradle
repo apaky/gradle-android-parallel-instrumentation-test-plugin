@@ -1,0 +1,73 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+//  dependencies {
+//    classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.3'
+//  }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group = 'com.myob.android'
+version = '0.0.1-SNAPSHOT'
+
+
+task wrapper(type: Wrapper) {
+  gradleVersion = "1.11"
+}
+
+dependencies {
+  repositories {
+    mavenCentral()
+  }
+
+  compile gradleApi()
+  compile localGroovy()
+  compile 'junit:junit:3.8.2'
+  compile 'com.android.tools.build:gradle:0.9.2'
+
+  testCompile 'org.spockframework:spock-core:0.7-groovy-1.8'
+}
+
+install {
+  repositories.mavenInstaller {
+    pom.artifactId = 'parallel-instrumentation-tests'
+  }
+}
+uploadArchives {
+  repositories.mavenDeployer {
+    pom.artifactId = 'parallel-instrumentation-tests'
+  }
+}
+
+pom {
+  project {
+    name 'Gradle Android Parallel Instrumentation Test Execution Plugin'
+    description "A Gradle plugin which runs instrumentation tests across many emulators or devices in parallel"
+    url 'https://github.com/MYOB-Technology/gradle-android-parallel-instrumentation-test-plugin'
+    inceptionYear '2014'
+
+    scm {
+      url 'https://github.com/MYOB-Technology/gradle-android-parallel-instrumentation-test-plugin'
+      connection 'scm:git:git://github.com/MYOB-Technology/gradle-android-parallel-instrumentation-test-plugin'
+      developerConnection 'scm:git:ssh://git@github.com/MYOB-Technology/gradle-android-parallel-instrumentation-test-plugin'
+    }
+
+    licenses {
+      license {
+        name 'The Apache Software License, Version 2.0'
+        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        distribution 'repo'
+      }
+    }
+
+    organization {
+      name 'MYOB'
+      url 'http://myob.com.au'
+    }
+  }
+}
