@@ -2,10 +2,6 @@ buildscript {
   repositories {
     mavenCentral()
   }
-
-//  dependencies {
-//    classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.3'
-//  }
 }
 
 apply plugin: 'groovy'
@@ -14,7 +10,6 @@ apply plugin: 'maven-publish'
 
 group = 'com.myob.android'
 version = '0.0.1-SNAPSHOT'
-
 
 task wrapper(type: Wrapper) {
   gradleVersion = "1.11"
@@ -27,7 +22,6 @@ dependencies {
 
   compile gradleApi()
   compile localGroovy()
-  compile 'junit:junit:3.8.2'
   compile 'com.android.tools.build:gradle:0.9.2'
 
   testCompile 'org.spockframework:spock-core:0.7-groovy-1.8'
@@ -35,12 +29,12 @@ dependencies {
 
 install {
   repositories.mavenInstaller {
-    pom.artifactId = 'parallel-instrumentation-tests'
+    pom.artifactId = 'gradle-parallel-instrumentation-tests'
   }
 }
 uploadArchives {
   repositories.mavenDeployer {
-    pom.artifactId = 'parallel-instrumentation-tests'
+    pom.artifactId = 'gradle-parallel-instrumentation-tests'
   }
 }
 

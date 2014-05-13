@@ -34,6 +34,8 @@ class InstrumentationTestTask extends DefaultTask {
 
   @TaskAction
   def runTask() {
+    def startTime = System.currentTimeMillis()
+
     ParallelInstrumentationTestExtension config = project.extensions.findByType(ParallelInstrumentationTestExtension)
     ConnectedDeviceProvider provider = getDeviceProvider()
 
@@ -60,11 +62,15 @@ class InstrumentationTestTask extends DefaultTask {
     }
 
     List<Future<Boolean>> futures = []
+    Random rand = new Random()
     ExecutorService executorService = Executors.newFixedThreadPool(packagesToExecute.size())
     executions.each { TestExecution execution ->
       futures << executorService.submit(new Callable<Boolean>() {
         @Override
         Boolean call() throws Exception {
+          // Wait a small amount of random time, as kicking off tests at the exact same time causes ddmlib
+          // errors when deploying apps
+          Thread.sleep((int)Math.abs(rand.nextFloat() * 5000))
           return execution.execute()
         }
       })
@@ -76,6 +82,9 @@ class InstrumentationTestTask extends DefaultTask {
         success = false
       }
     }
+    def endTime = System.currentTimeMillis()
+    def timeInMinutes = (endTime-startTime)/1000/60
+    println "Completed parallel tests in $timeInMinutes minutes"
     if (!success) {
       throw new GradleException("Acceptance tests failed")
     }
