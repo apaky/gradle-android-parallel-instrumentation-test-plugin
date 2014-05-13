@@ -42,7 +42,7 @@ class TestExecution {
     RemoteAndroidTestRunner runner = createTestRunner()
     boolean testRunPassed
     try {
-      println "Running test for package ${instrumentationOption.value}"
+      println "Running test for ${instrumentationOption.name} ${instrumentationOption.value}"
       runner.run(runListener)
       println "Complete tests for package ${instrumentationOption.value}.  There were ${runListener.runResult.numFailedTests} failures"
       testRunPassed = !runListener.runResult.hasFailedTests()
