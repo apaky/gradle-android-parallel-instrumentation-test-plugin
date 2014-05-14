@@ -39,12 +39,12 @@ class InstrumentationTestTask extends DefaultTask {
     ParallelInstrumentationTestExtension config = project.extensions.findByType(ParallelInstrumentationTestExtension)
     ConnectedDeviceProvider provider = getDeviceProvider()
 
-    List<String> packagesToExecute = config.concurrentInstrumentationPackages
+    def packagesToExecute = config.concurrentInstrumentationPackages
     List<DeviceConnector> devices = provider.devices
     checkSufficientNumberOfDevices(packagesToExecute, devices)
 
     List<TestExecution> executions = []
-    packagesToExecute.eachWithIndex { String packageName, i ->
+    packagesToExecute.eachWithIndex { def packages, i ->
       executions << new TestExecution(
               appUnderTest: applicationApk,
               projectName: project.name,
@@ -53,7 +53,7 @@ class InstrumentationTestTask extends DefaultTask {
               testApp: testApk,
               device: devices[i],
               testData: testData,
-              instrumentationOption: new InstrumentationOption(name: InstrumentationOption.PACKAGE, value: packageName),
+              instrumentationOptions: InstrumentationOption.fromPackageNames(packages),
               testCallbacks: new TestLifecycleCallback(beforeTest: config.onBeforeDeviceTest, afterTest: config.onAfterDeviceTest))
     }
 

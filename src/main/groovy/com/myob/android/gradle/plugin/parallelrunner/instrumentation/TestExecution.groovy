@@ -4,7 +4,6 @@ import com.android.builder.internal.testing.CustomTestRunListener
 import com.android.builder.testing.TestData
 import com.android.builder.testing.api.DeviceConnector
 import com.android.builder.testing.api.DeviceException
-import com.android.ddmlib.testrunner.RemoteAndroidTestRunner
 import com.myob.android.gradle.plugin.parallelrunner.Logger
 
 class TestExecution {
@@ -12,7 +11,7 @@ class TestExecution {
   File testApp
   File appUnderTest
   DeviceConnector device
-  InstrumentationOption instrumentationOption
+  List<InstrumentationOption> instrumentationOptions
   TestLifecycleCallback testCallbacks
   TestData testData
   File reportDir
@@ -31,7 +30,7 @@ class TestExecution {
     } finally {
       afterTest()
       def timeTaken = (System.currentTimeMillis() - start) / 1000 / 60
-      println "Completed tests for ${instrumentationOption.value} in $timeTaken minutes"
+      println "Completed tests on $device.name in $timeTaken minutes"
     }
   }
 
@@ -39,12 +38,12 @@ class TestExecution {
     CustomTestRunListener runListener = new CustomTestRunListener(device.name, projectName, flavorName, Logger.getLoggerWrapper());
     runListener.reportDir = reportDir;
 
-    RemoteAndroidTestRunner runner = createTestRunner()
+    MultiOptionTestRunnner runner = createTestRunner()
     boolean testRunPassed
     try {
-      println "Running test for ${instrumentationOption.name} ${instrumentationOption.value}"
+      println "Running test on ${device.name}"
       runner.run(runListener)
-      println "Complete tests for package ${instrumentationOption.value}.  There were ${runListener.runResult.numFailedTests} failures"
+      println "Complete tests on ${device.name}.  There were ${runListener.runResult.numFailedTests} failures"
       testRunPassed = !runListener.runResult.hasFailedTests()
     } catch (Exception e) {
       println "Error running tests!!!! ${e.message}"
@@ -53,11 +52,13 @@ class TestExecution {
     testRunPassed
   }
 
-  private RemoteAndroidTestRunner createTestRunner() {
-    RemoteAndroidTestRunner runner = new RemoteAndroidTestRunner(testData.packageName, testData.instrumentationRunner, device);
+  private MultiOptionTestRunnner createTestRunner() {
+    MultiOptionTestRunnner runner = new MultiOptionTestRunnner(testData.packageName, testData.instrumentationRunner, device);
     runner.runName = device.name
     runner.setMaxtimeToOutputResponse(0);
-    runner.addInstrumentationArg(instrumentationOption.name, instrumentationOption.value)
+    instrumentationOptions.each {InstrumentationOption option ->
+      runner.addInstrumentationArg(option.name, option.value)
+    }
     runner
   }
 
@@ -94,7 +95,7 @@ class TestExecution {
             "testApp=" + testApp +
             ", appUnderTest=" + appUnderTest +
             ", device=" + device.properties +
-            ", instrumentationOption=" + instrumentationOption +
+            ", instrumentationOptions=" + instrumentationOptions +
             ", testCallbacks=" + testCallbacks +
             ", testData=" + testData +
             ", reportDir=" + reportDir +
