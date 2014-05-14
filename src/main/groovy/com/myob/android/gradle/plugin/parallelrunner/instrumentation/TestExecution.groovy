@@ -43,7 +43,7 @@ class TestExecution {
     try {
       println "Running test on ${device.name}"
       runner.run(runListener)
-      println "Complete tests on ${device.name}.  There were ${runListener.runResult.numFailedTests} failures"
+      println "Complete tests on ${device.name}. ${runListener.runResult.numCompleteTests} completed tests, ${runListener.runResult.numFailedTests} failures, ${runListener.runResult.numErrorTests} errors"
       testRunPassed = !runListener.runResult.hasFailedTests()
     } catch (Exception e) {
       println "Error running tests!!!! ${e.message}"
