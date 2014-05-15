@@ -4,6 +4,7 @@ import com.android.builder.internal.testing.CustomTestRunListener
 import com.android.builder.testing.TestData
 import com.android.builder.testing.api.DeviceConnector
 import com.android.builder.testing.api.DeviceException
+import com.android.ddmlib.testrunner.RemoteAndroidTestRunner
 import com.myob.android.gradle.plugin.parallelrunner.Logger
 
 class TestExecution {
@@ -17,6 +18,7 @@ class TestExecution {
   File reportDir
   String projectName
   String flavorName
+  boolean installApps = true
 
   boolean execute() {
     def start = System.currentTimeMillis()
@@ -38,7 +40,7 @@ class TestExecution {
     CustomTestRunListener runListener = new CustomTestRunListener(device.name, projectName, flavorName, Logger.getLoggerWrapper());
     runListener.reportDir = reportDir;
 
-    MultiOptionTestRunnner runner = createTestRunner()
+    RemoteAndroidTestRunner runner = createTestRunner()
     boolean testRunPassed
     try {
       println "Running test on ${device.name}"
@@ -52,8 +54,8 @@ class TestExecution {
     testRunPassed
   }
 
-  private MultiOptionTestRunnner createTestRunner() {
-    MultiOptionTestRunnner runner = new MultiOptionTestRunnner(testData.packageName, testData.instrumentationRunner, device);
+  private RemoteAndroidTestRunner createTestRunner() {
+    RemoteAndroidTestRunner runner = new RemoteAndroidTestRunner(testData.packageName, testData.instrumentationRunner, device);
     runner.runName = device.name
     runner.setMaxtimeToOutputResponse(0);
     instrumentationOptions.each {InstrumentationOption option ->
@@ -74,8 +76,13 @@ class TestExecution {
     }
   }
 
-  private ArrayList<File> installApps() {
-    [testApp, appUnderTest].each { File app ->
+  private void installApps() {
+    def appsToInstall = [testApp]
+    if (installApps) {
+      appsToInstall << appUnderTest
+    }
+
+    appsToInstall.each { File app ->
       println "Attempting to install ${app.absolutePath} to ${device.name}..."
 
       try {

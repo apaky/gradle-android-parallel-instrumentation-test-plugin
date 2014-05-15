@@ -16,8 +16,8 @@ apply plugin: 'parallel-instrumentation-tests'
 parallelInstrumentationTests {
   concurrentInstrumentationPackages = [	  
 	  "com.acme.instrumentation.test.foo",
-  	  ["com.acme.instrumentation.test.bar","com.acme.instrumentation.test.baz"]
-  ]
+  	  "com.acme.instrumentation.test.bar"
+  	  ]
 
   onBeforeAllTests {
     printtln "Hi, I'm executed before any test is run"
@@ -33,4 +33,4 @@ parallelInstrumentationTests {
 }
 ````
 
-The above configuration will execute two concurrent instrumentation tests.  Once execution will run the tests in package *com.acme.instrument.test.foo* and the other will run the tests in both *com.acme.instrumentation.test.bar* **and** *com.acme.instrumentation.test.baz*
+The above configuration will execute two concurrent instrumentation tests.  Once execution will run the tests in package *com.acme.instrument.test.foo*,and the other will run the tests in *com.acme.instrumentation.test.bar*

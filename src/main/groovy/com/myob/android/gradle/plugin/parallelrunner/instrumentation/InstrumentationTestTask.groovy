@@ -51,6 +51,7 @@ class InstrumentationTestTask extends DefaultTask {
               flavorName: flavorName,
               reportDir: reportDir,
               testApp: testApk,
+              installApps: config.installApplication,
               device: devices[i],
               testData: testData,
               instrumentationOptions: InstrumentationOption.fromPackageNames(packages),
@@ -58,7 +59,7 @@ class InstrumentationTestTask extends DefaultTask {
     }
 
     if (config.onBeforeAllTests) {
-      config.onBeforeAllTests.call()
+      config.onBeforeAllTests.call(testApk, applicationApk)
     }
 
     List<Future<Boolean>> futures = []
