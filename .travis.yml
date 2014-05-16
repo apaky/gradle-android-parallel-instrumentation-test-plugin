@@ -1,14 +1,16 @@
 language: groovy
 jdk:
-  - oraclejdk7
-  - openjdk7
-  - openjdk6
-
+- oraclejdk7
+- openjdk7
+- openjdk6
 notifications:
   email:
     recipients:
-      - george.papas@gmail.com
-      - matthew.ueckerman@myob.com
-      - andrew.louth@myob.com
+    - george.papas@gmail.com
+    - matthew.ueckerman@myob.com
+    - andrew.louth@myob.com
     on_success: always
     on_failure: always
+  hipchat:
+    rooms:
+      secure: Ys0F+J5D21auYftEYvPMuOTbkR5GGlec3qrL5PKZa99rEeifvFZpOcZUF2dKmqsBjp6g+VrPipKqUHlJv31E9s8zlXG0l2ndOvDXypxzF/9wLwbaufi7V+RIw1bQ5rBy23lEP4/KTO9MhP+w7UwuaxQiJIP/8Gte+K0UnTaVJYQ=
