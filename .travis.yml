@@ -4,3 +4,11 @@ jdk:
   - openjdk7
   - openjdk6
 
+notifications:
+  email:
+    recipients:
+      - george.papas@gmail.com
+      - matthew.ueckerman@myob.com
+      - andrew.louth@myob.com
+    on_success: always
+    on_failure: always
