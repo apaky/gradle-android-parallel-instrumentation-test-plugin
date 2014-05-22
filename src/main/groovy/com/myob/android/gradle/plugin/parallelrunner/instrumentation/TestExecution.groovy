@@ -37,30 +37,36 @@ class TestExecution {
   }
 
   boolean runTest() {
-    CustomTestRunListener runListener = new CustomTestRunListener(device.name, projectName, flavorName, Logger.getLoggerWrapper());
-    runListener.reportDir = reportDir;
 
-    RemoteAndroidTestRunner runner = createTestRunner()
-    boolean testRunPassed
-    try {
-      println "Running test on ${device.name}"
-      runner.run(runListener)
-      println "Complete tests on ${device.name}. ${runListener.runResult.numCompleteTests} completed tests, ${runListener.runResult.numFailedTests} failures, ${runListener.runResult.numErrorTests} errors"
-      testRunPassed = !runListener.runResult.hasFailedTests()
-    } catch (Exception e) {
-      println "Error running tests!!!! ${e.message}"
-      testRunPassed = false
+    boolean testRunPassed = true
+
+    instrumentationOptions.eachWithIndex { InstrumentationOption option , int index ->
+      CustomTestRunListener runListener = new CustomTestRunListener(device.name, "${projectName}-execution-${index+1}", flavorName, Logger.getLoggerWrapper());
+      runListener.reportDir = reportDir;
+
+      RemoteAndroidTestRunner runner = createTestRunner(option)
+      try {
+        println "${device.name} - running test with option $option"
+        runner.run(runListener)
+        println "${device.name} - completed test with option $option - ${runListener.runResult.numCompleteTests} tests, ${runListener.runResult.numFailedTests} failures, ${runListener.runResult.numErrorTests} errors"
+        if (runListener.runResult.hasFailedTests()){
+          testRunPassed = false
+        }
+      } catch (Exception e) {
+        println "Error running tests ${e.message}"
+        testRunPassed = false
+      }
+
     }
     testRunPassed
+
   }
 
-  private RemoteAndroidTestRunner createTestRunner() {
+  private RemoteAndroidTestRunner createTestRunner(InstrumentationOption option) {
     RemoteAndroidTestRunner runner = new RemoteAndroidTestRunner(testData.packageName, testData.instrumentationRunner, device);
     runner.runName = device.name
     runner.setMaxtimeToOutputResponse(0);
-    instrumentationOptions.each {InstrumentationOption option ->
-      runner.addInstrumentationArg(option.name, option.value)
-    }
+    runner.addInstrumentationArg(option.name, option.value)
     runner
   }
 
