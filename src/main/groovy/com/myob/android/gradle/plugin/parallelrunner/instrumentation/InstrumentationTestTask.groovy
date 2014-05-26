@@ -1,6 +1,6 @@
 package com.myob.android.gradle.plugin.parallelrunner.instrumentation
 
-import com.android.build.gradle.internal.Sdk
+import com.android.build.gradle.internal.SdkHandler
 import com.android.builder.testing.ConnectedDeviceProvider
 import com.android.builder.testing.TestData
 import com.android.builder.testing.api.DeviceConnector
@@ -24,7 +24,7 @@ class InstrumentationTestTask extends DefaultTask {
   @InputFile
   File applicationApk
 
-  Sdk sdk
+  SdkHandler sdk
 
   String flavorName
 
@@ -93,7 +93,7 @@ class InstrumentationTestTask extends DefaultTask {
   }
 
   private ConnectedDeviceProvider getDeviceProvider() {
-    DeviceProvider provider = new ConnectedDeviceProvider(sdk.parser)
+    DeviceProvider provider = new ConnectedDeviceProvider(sdk.sdkInfo.adb)
     provider.init()
     provider
   }

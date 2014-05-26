@@ -3,8 +3,7 @@ package com.myob.android.gradle.plugin.parallelrunner
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.api.TestVariant
-import com.android.build.gradle.internal.Sdk
-import com.android.builder.DefaultProductFlavor
+import com.android.build.gradle.internal.SdkHandler
 import com.android.builder.model.ProductFlavor
 import com.android.builder.testing.TestData
 import com.myob.android.gradle.plugin.parallelrunner.instrumentation.InstrumentationTestTask
@@ -24,9 +23,7 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
 
   void addParallelInstrumentationTasks(Project project) {
     AppExtension androidExtension = project.android
-    Sdk sdk = new Sdk(project, Logger.getLoggerWrapper())
-    sdk.extension = androidExtension
-    sdk.loadParser()
+    SdkHandler sdk = new SdkHandler(project, Logger.getLoggerWrapper())
 
     TestData testData = createTestData(androidExtension.defaultConfig)
     androidExtension.testVariants.all { TestVariant variant ->
@@ -62,6 +59,11 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
       }
 
       @Override
+      boolean isTestCoverageEnabled() {
+        return false
+      }
+
+      @Override
       int getMinSdkVersion() {
         flavor.minSdkVersion
       }
@@ -77,7 +79,7 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
     project.extensions.create("parallelInstrumentationTests", ParallelInstrumentationTestExtension)
   }
 
-  void createTask(final Project project, final Sdk sdk, final TestVariant variant, final TestData testData) {
+  void createTask(final Project project, final SdkHandler sdk, final TestVariant variant, final TestData testData) {
     InstrumentationTestTask task = project.tasks.create("parallel${variant.name.capitalize()}", InstrumentationTestTask)
     task.dependsOn variant.assemble, variant.testedVariant.assemble
     task.group = JavaBasePlugin.VERIFICATION_GROUP
