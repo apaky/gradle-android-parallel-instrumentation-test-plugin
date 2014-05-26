@@ -3,11 +3,14 @@
 Plugin runs instrumentation tests in parallel.  Deploys the app and test app to each emulator and runs a different set of tests on each emulator.  
 
 ## Requirements
-Enough emulators running based on the maximum concurrent executions as configured in the plugin dsl
+
+  - Enough emulators running based on the maximum concurrent executions as configured in the plugin dsl
+
+ - Gradle anroid build tools plugin 0.10.2+
 
 #Usage
 
-Requires the android plugin to be used
+Requires the android plugin to be loaded.
 
 
 ````
@@ -20,7 +23,7 @@ parallelInstrumentationTests {
   	  ]
 
   onBeforeAllTests {
-    printtln "Hi, I'm executed before any test is run"
+    println "Hi, I'm executed before any test is run"
   }
 
   onBeforeDeviceTest { device ->
@@ -33,4 +36,4 @@ parallelInstrumentationTests {
 }
 ````
 
-The above configuration will execute two concurrent instrumentation tests.  Once execution will run the tests in package *com.acme.instrument.test.foo*,and the other will run the tests in *com.acme.instrumentation.test.bar*
+The above configuration will execute two concurrent instrumentation tests.  One execution will run the tests in package *com.acme.instrument.test.foo*, and the other will run the tests in *com.acme.instrumentation.test.bar*
