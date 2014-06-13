@@ -4,6 +4,7 @@ import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.api.TestVariant
 import com.android.build.gradle.internal.SdkHandler
+import com.android.builder.model.ApiVersion
 import com.android.builder.model.ProductFlavor
 import com.android.builder.testing.TestData
 import com.myob.android.gradle.plugin.parallelrunner.instrumentation.InstrumentationTestTask
@@ -34,43 +35,43 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
   def createTestData(ProductFlavor flavor) {
     return new TestData(){
       @Override
-      String getPackageName() {
-        flavor.testPackageName
+      String getApplicationId() {
+        return flavor.applicationId;
       }
 
       @Override
-      String getTestedPackageName() {
-        flavor.packageName
+      String getTestedApplicationId() {
+        return flavor.testApplicationId;
       }
 
       @Override
       String getInstrumentationRunner() {
-        flavor.testInstrumentationRunner
+        return flavor.testInstrumentationRunner;
       }
 
       @Override
       Boolean getHandleProfiling() {
-        flavor.testHandleProfiling
+        return flavor.testHandleProfiling;
       }
 
       @Override
       Boolean getFunctionalTest() {
-        flavor.testFunctionalTest
+        return flavor.testFunctionalTest;
       }
 
       @Override
       boolean isTestCoverageEnabled() {
-        return false
+        return true;
       }
 
       @Override
-      int getMinSdkVersion() {
-        flavor.minSdkVersion
+      ApiVersion getMinSdkVersion() {
+        return flavor.minSdkVersion;
       }
 
       @Override
       Set<String> getSupportedAbis() {
-        null
+        return null;
       }
     }
   }

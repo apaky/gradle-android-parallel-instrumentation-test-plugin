@@ -9,11 +9,10 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'com.myob.android'
-version = '0.0.6-SNAPSHOT'
-//version = '0.0.6'
+version = '0.0.7-SNAPSHOT'
 
 task wrapper(type: Wrapper) {
-  gradleVersion = "1.11"
+  gradleVersion = "1.12"
 }
 
 dependencies {
@@ -23,7 +22,7 @@ dependencies {
 
   compile gradleApi()
   compile localGroovy()
-  compile 'com.android.tools.build:gradle:0.10.2'
+  compile 'com.android.tools.build:gradle:0.11.+'
 
   testCompile 'org.spockframework:spock-core:0.7-groovy-1.8'
 }

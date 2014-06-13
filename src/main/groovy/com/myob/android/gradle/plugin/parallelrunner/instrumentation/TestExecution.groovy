@@ -63,7 +63,7 @@ class TestExecution {
   }
 
   private RemoteAndroidTestRunner createTestRunner(InstrumentationOption option) {
-    RemoteAndroidTestRunner runner = new RemoteAndroidTestRunner(testData.packageName, testData.instrumentationRunner, device);
+    RemoteAndroidTestRunner runner = new RemoteAndroidTestRunner(testData.applicationId, testData.instrumentationRunner, device);
     runner.runName = device.name
     runner.setMaxtimeToOutputResponse(0);
     runner.addInstrumentationArg(option.name, option.value)
