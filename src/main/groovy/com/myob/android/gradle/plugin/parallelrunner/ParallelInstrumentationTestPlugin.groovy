@@ -1,11 +1,16 @@
 package com.myob.android.gradle.plugin.parallelrunner
 
+import com.android.annotations.NonNull
+import com.android.annotations.Nullable
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.api.TestVariant
 import com.android.build.gradle.internal.SdkHandler
+import com.android.builder.core.DefaultBuildType
+import com.android.builder.core.DefaultProductFlavor
 import com.android.builder.model.ApiVersion
 import com.android.builder.model.ProductFlavor
+import com.android.builder.model.SourceProvider
 import com.android.builder.testing.TestData
 import com.myob.android.gradle.plugin.parallelrunner.instrumentation.InstrumentationTestTask
 import org.gradle.api.Plugin
@@ -27,21 +32,25 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
     SdkHandler sdk = new SdkHandler(project, Logger.getLoggerWrapper())
 
     TestData testData = createTestData(androidExtension.defaultConfig)
+
     androidExtension.testVariants.all { TestVariant variant ->
+
       createTask(project, sdk, variant, testData)
     }
   }
 
   def createTestData(ProductFlavor flavor) {
+
     return new TestData(){
+
       @Override
       String getApplicationId() {
-        return flavor.applicationId;
+        return flavor.testApplicationId
       }
 
       @Override
       String getTestedApplicationId() {
-        return flavor.testApplicationId;
+        return flavor.applicationId;
       }
 
       @Override
