@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MYOB-Technology/gradle-android-parallel-instrumentation-test-plugin.svg?branch=master)](https://travis-ci.org/MYOB-Technology/gradle-android-parallel-instrumentation-test-plugin)
+
 # A gradle android plugin capable of running instrumentation tests in parallel
 
 Plugin runs instrumentation tests in parallel.  Deploys the app and test app to each emulator and runs a different set of tests on each emulator.  
