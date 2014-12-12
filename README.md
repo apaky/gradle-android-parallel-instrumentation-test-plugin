@@ -6,9 +6,9 @@ Plugin runs instrumentation tests in parallel.  Deploys the app and test app to 
 
 ## Requirements
 
-  - Enough emulators running based on the maximum concurrent executions as configured in the plugin dsl
+  - Enough emulators running based on the maximum concurrent executions as configured in the plugin DSL
 
- - Gradle anroid build tools plugin 0.10.2+
+ - Gradle Android build tools plugin 1.0.+
 
 #Usage
 
