@@ -48,7 +48,7 @@ class TestExecution {
       try {
         println "${device.name} - running test with option $option"
         runner.run(runListener)
-        println "${device.name} - completed test with option $option - ${runListener.runResult.numCompleteTests} tests, ${runListener.runResult.numFailedTests} failures, ${runListener.runResult.numErrorTests} errors"
+        println "${device.name} - completed test with option $option - ${runListener.runResult.numCompleteTests} tests, ${runListener.runResult.numAllFailedTests} failures"
         if (runListener.runResult.hasFailedTests()){
           testRunPassed = false
         }
