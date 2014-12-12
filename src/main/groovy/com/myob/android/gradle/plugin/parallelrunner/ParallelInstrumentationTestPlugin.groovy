@@ -1,17 +1,14 @@
 package com.myob.android.gradle.plugin.parallelrunner
 
 import com.android.annotations.NonNull
-import com.android.annotations.Nullable
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.api.TestVariant
 import com.android.build.gradle.internal.SdkHandler
-import com.android.builder.core.DefaultBuildType
-import com.android.builder.core.DefaultProductFlavor
 import com.android.builder.model.ApiVersion
 import com.android.builder.model.ProductFlavor
-import com.android.builder.model.SourceProvider
 import com.android.builder.testing.TestData
+import com.google.common.collect.ImmutableList
 import com.myob.android.gradle.plugin.parallelrunner.instrumentation.InstrumentationTestTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -34,7 +31,6 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
     TestData testData = createTestData(androidExtension.defaultConfig)
 
     androidExtension.testVariants.all { TestVariant variant ->
-
       createTask(project, sdk, variant, testData)
     }
   }
@@ -79,9 +75,15 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
       }
 
       @Override
-      Set<String> getSupportedAbis() {
-        return null;
+      boolean isLibrary() {
+        return false
       }
+
+      @Override
+      ImmutableList<File> getTestedApks(int density, @NonNull List<String> abis) {
+        return null
+      }
+
     }
   }
 
@@ -95,8 +97,8 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
     task.group = JavaBasePlugin.VERIFICATION_GROUP
     task.description = "Parellelises instrumentation tests across all connected devices for '${variant.name.capitalize()}'"
 
-    task.applicationApk = variant.testedVariant.outputFile
-    task.testApk = variant.outputFile
+    task.applicationApk = variant.testedVariant.outputs.first().outputFile
+    task.testApk = variant.outputs.first().outputFile
     task.sdk = sdk
     task.testData = testData
     task.flavorName = variant.flavorName
@@ -108,4 +110,5 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
       throw new IllegalStateException("Android plugin is required but not found")
     }
   }
+
 }
