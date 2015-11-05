@@ -1,6 +1,7 @@
 package com.myob.android.gradle.plugin.parallelrunner
 
 import com.android.annotations.NonNull
+import com.android.annotations.Nullable
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.api.TestVariant
@@ -8,6 +9,10 @@ import com.android.build.gradle.internal.SdkHandler
 import com.android.builder.model.ApiVersion
 import com.android.builder.model.ProductFlavor
 import com.android.builder.testing.TestData
+import com.android.builder.testing.api.DeviceConfigProvider
+import com.android.ide.common.process.ProcessException
+import com.android.ide.common.process.ProcessExecutor
+import com.android.utils.ILogger
 import com.google.common.collect.ImmutableList
 import com.myob.android.gradle.plugin.parallelrunner.instrumentation.InstrumentationTestTask
 import org.gradle.api.Plugin
@@ -55,13 +60,8 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
       }
 
       @Override
-      Boolean getHandleProfiling() {
-        return flavor.testHandleProfiling;
-      }
-
-      @Override
-      Boolean getFunctionalTest() {
-        return flavor.testFunctionalTest;
+      Map<String, String> getInstrumentationRunnerArguments() {
+        return flavor.testInstrumentationRunnerArguments
       }
 
       @Override
@@ -80,7 +80,24 @@ class ParallelInstrumentationTestPlugin implements Plugin<Project> {
       }
 
       @Override
-      ImmutableList<File> getTestedApks(int density, @NonNull List<String> abis) {
+      ImmutableList<File> getTestedApks(
+        @NonNull ProcessExecutor processExecutor,
+        @Nullable File splitSelectExe, @NonNull DeviceConfigProvider deviceConfigProvider, ILogger logger) throws ProcessException {
+        return null
+      }
+
+      @Override
+      String getFlavorName() {
+        return flavor.name
+      }
+
+      @Override
+      File getTestApk() {
+        return null
+      }
+
+      @Override
+      List<File> getTestDirectories() {
         return null
       }
 

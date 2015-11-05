@@ -37,7 +37,6 @@ class TestExecution {
   }
 
   boolean runTest() {
-
     boolean testRunPassed = true
 
     instrumentationOptions.eachWithIndex { InstrumentationOption option , int index ->
@@ -92,7 +91,7 @@ class TestExecution {
       println "Attempting to install ${app.absolutePath} to ${device.name}..."
 
       try {
-        device.installPackage(app, 300000, Logger.getLoggerWrapper())
+        device.installPackage(app, [], 300000, Logger.getLoggerWrapper())
       } catch (DeviceException e) {
         Logger.error("Error installing $app to ${device.name} ${e.message}")
         throw e

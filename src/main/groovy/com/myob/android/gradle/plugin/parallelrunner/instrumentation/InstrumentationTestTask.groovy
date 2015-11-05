@@ -1,5 +1,6 @@
 package com.myob.android.gradle.plugin.parallelrunner.instrumentation
 
+import com.android.build.gradle.internal.LoggerWrapper
 import com.android.build.gradle.internal.SdkHandler
 import com.android.builder.testing.ConnectedDeviceProvider
 import com.android.builder.testing.TestData
@@ -93,7 +94,7 @@ class InstrumentationTestTask extends DefaultTask {
   }
 
   private ConnectedDeviceProvider getDeviceProvider() {
-    DeviceProvider provider = new ConnectedDeviceProvider(sdk.sdkInfo.adb)
+    DeviceProvider provider = new ConnectedDeviceProvider(sdk.sdkInfo.adb, new LoggerWrapper(project.logger))
     provider.init()
     provider
   }
